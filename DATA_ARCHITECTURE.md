@@ -2,7 +2,13 @@
 
 **Updated:** 16 October 2026
 
-**Status:** Adopted planning baseline. This document defines data ownership and design principles; [DATABASE_SCHEMA_PLAN.md](DATABASE_SCHEMA_PLAN.md) owns exact SQL fields/relationships and [API_CONTRACTS.md](API_CONTRACTS.md) owns wire shapes. The planned thirteen-table pilot model is unchanged and no SQL schema exists. The webapp scaffold has account-partitioned IndexedDB metadata only; the authoritative application records/outbox remain unimplemented.
+**Status:** Adopted planning baseline. This document defines data ownership and design principles; [DATABASE_SCHEMA_PLAN.md](DATABASE_SCHEMA_PLAN.md) owns exact SQL fields/relationships and [API_CONTRACTS.md](API_CONTRACTS.md) owns wire shapes. Local migrations implement a calendar foundation subset; the planned thirteen-table calendar model is not a complete model for the expanded assistant. The webapp has account-partitioned IndexedDB metadata only; confirmed local records/outbox and the personalization model remain unimplemented.
+
+**Assistant extension:** [PERSONALIZATION_PLAN.md](PERSONALIZATION_PLAN.md#8-data-architecture-and-contracts-to-design) identifies accepted configuration, typed rules, memories, grants, proposals and later assignments/templates. Each requires explicit ownership/version/lifecycle design; conceptual records do not imply one table each. Persona text and derived charter summaries are not authoritative permission stores. Memory forgetting invalidates dependent context/retrieval; public templates use an allowlisted copy with no account facts or authority.
+
+**Knowledge extension:** [SECOND_BRAIN_PLAN.md](SECOND_BRAIN_PLAN.md#3-authority-representations-and-links) distinguishes captured sources, accepted Markdown bodies, typed facts, resolved links and derived search chunks/vectors. Source revisions/hashes fence stale derived work. Explicit links have stable same-owner targets, while semantic matches are not factual relationships or identity proof. Notes reference canonical schedules; direct Markdown edits cannot change dates/status/rewards. Exact note/link/search schemas and policies require a subsequent design pass.
+
+**Automatic organization:** Generated summaries/topics/mention links are reversible derived records, applied without routine approval within the owner's configured scope. Preserve kind, source span/revision, target, processing version and user corrections/rejections. Derived output never overwrites source text or independently becomes a confirmed People fact/rule. A removed connection must stay removed under its correction scope when processing retries; supported same-owner identity and current source/target eligibility still require validation.
 
 **Related:** [Software design](ARCHITECTURE_PRINCIPLES.md), [technical design](TECHNICAL_DESIGN.md), [RLS](RLS_PLAN.md), [local sync](LOCAL_SYNC_DESIGN.md), and [operations](OPERATIONS_PLAN.md).
 

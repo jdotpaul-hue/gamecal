@@ -2,7 +2,13 @@
 
 **Updated:** 16 October 2026
 
-**Status:** Product scope remains planned. A [webapp foundation](webapp/README.md) now exists with framework/tooling/helpers only; product UI/UX, Auth journeys, calendar commands and sync are not implemented.
+**Status:** Product scope remains planned. The [webapp foundation](webapp/README.md) implements framework/tooling/helpers, local SQL/RLS/read and command RPCs, generated database types and typed clients. Product UI/UX, complete Auth journeys, durable sync and assistant/voice/People features are not implemented. Current correctness gaps are in [the review register](DOCS_REVIEW.md#7-review-of-commits-35b6a5b-and-6a160ed).
+
+**16 October product pivot:** The user now wants personal AI as the primary feature, voice-led interaction and Calendar/People capabilities. People means keeping in touch and planning with people. [PERSONAL_AI_PLAN.md](PERSONAL_AI_PLAN.md) owns that new direction and the proposed first AI pilot. The calendar-first positioning, optional-AI release matrix and mandatory split-home guidance below are the earlier baseline; their concrete calendar invariants remain useful, but they are not the finalized AI-first launch scope. No assistant/voice/People implementation is implied.
+
+**Personalization proposal:** [PERSONALIZATION_PLAN.md](PERSONALIZATION_PLAN.md) records the requested hybrid of personality/charter, settings, teaching and templates. Recommended first scope is built-in styles, an editable charter, explicit memories and a few typed planning rules. Permissions stay action-specific and enforced outside the model. Behavior-derived suggestions, private template portability, public discovery and standing autonomous work are staged later, not silently added to the first pilot.
+
+**Second-brain proposal:** [SECOND_BRAIN_PLAN.md](SECOND_BRAIN_PLAN.md) explores a cute-monster voice companion that helps capture, organize and recall private linked notes. The user confirmed automatic organization/linking: no manual taxonomy or per-link approval is required. Notes are Markdown-compatible; schedules and permissions stay typed. Recommended knowledge sequence is explicit capture, automatically validated connections with selective clarification, and cited retrieval, then separately approved plans. A graph view, embeddings, direct folder sync, proactive briefings and agent-to-agent negotiation are independently gated later capabilities, not automatic additions to the initial pilot.
 
 **Working name:** Gamecal
 
@@ -18,9 +24,9 @@ This document replaces the earlier Android-first and trader-focused proposals. S
 
 **Design principles:** Adopt [CUPID](ARCHITECTURE_PRINCIPLES.md) and the [data architecture principles](DATA_ARCHITECTURE.md): domain-oriented feature modules, clear fact ownership, predictable operations and canonical consistency. The current stack, release gates and planned schema remain unchanged.
 
-**Database/RLS planning:** [Database structure](DATABASE_SCHEMA_PLAN.md) and [permissions plan](RLS_PLAN.md) make the PostgreSQL/Supabase design reviewable before connection or execution: nine owner-readable application tables, two private sync tables plus two private operating tables before pilot readiness, controlled writes, relationship/reward constraints, and separate later public-content policies. No tables, rules, buckets, or remote connection exist yet.
+**Database/RLS planning:** [Database structure](DATABASE_SCHEMA_PLAN.md) and [permissions plan](RLS_PLAN.md) define the PostgreSQL/Supabase target: nine owner-readable application tables, two private sync tables plus two private operating tables before pilot readiness, controlled writes, relationship/reward constraints, and separate later public-content policies. A foundation subset now exists in tested local migrations; the full pilot model, buckets and remote deployment are not complete.
 
-**API planning:** [API_CONTRACTS.md](API_CONTRACTS.md) defines calendar/sync RPCs, reviewed itinerary commands, provider/AI routes, request/response/error contracts, and the first delivery slice. It adds no application implementation or database connection.
+**API planning:** [API_CONTRACTS.md](API_CONTRACTS.md) defines calendar/sync RPCs, reviewed itinerary commands, provider/AI routes, request/response/error contracts, and the first delivery slice. Local calendar foundation RPCs and initial runtime schemas now implement part of this plan; itinerary/provider/assistant paths and the complete sync journey remain planned.
 
 **First-session planning:** [FIRST_SESSION_PLAN.md](FIRST_SESSION_PLAN.md) defines account/setup, the first split workspace, quest editor, completion/undo, exact saved-versus-synced copy, and recovery/acceptance journeys. One accepted quest earns 20 XP; the first room upgrade remains at 100 XP. It is documentation only.
 

@@ -32,7 +32,8 @@ src/
   lib/
     env/                       public config parsing and server-only boundary
     local-db/                  account-partitioned, versioned IndexedDB metadata
-    supabase/                  browser/server Auth factories and response decoding
+    api/contracts/             initial runtime RPC schemas; domain DTO gaps remain
+    supabase/                  generated-type clients, Auth factories and RPC helpers
     validation/                branded IDs and exact decimal revisions/counters
     result.ts                  discriminated result type and exhaustive failure helper
 scripts/database.ts            local-only type generation/drift/database-test guards
@@ -49,7 +50,7 @@ The time helpers implement the documented routine/appointment DST distinction an
 
 Compiler options include strict mode, checked indexed access, exact optional properties and explicit return/fallthrough/catch checks. Type-aware lint rejects unsafe values, explicit `any`, non-null assertions and unhandled promises. Maintained tests/scripts are type-checked too; `skipLibCheck` is limited to dependency declaration checking. Negative cases are confined to dedicated type tests.
 
-Zod validates values at runtime. JSON/JSONB RPCs still need feature-specific response schemas when implemented; the decoder here supplies failure semantics without inventing endpoint shapes. Decoder failure never proves a write failed or authorizes queue removal. SQL/RLS remains an independent required layer.
+Zod validates values at runtime. Initial read/command schemas exist, with entity-specific DTO and command-input validation still incomplete. [The review register](../DOCS_REVIEW.md#7-review-of-commits-35b6a5b-and-6a160ed) identifies pagination and zero-value decoding bugs. Decoder failure never proves a write failed or authorizes queue removal. SQL/RLS remains an independent required layer.
 
 | Command                                 | Current purpose                                                             |
 | --------------------------------------- | --------------------------------------------------------------------------- |
@@ -80,14 +81,15 @@ The account database exposes initialization and close operations over `sync_meta
 
 ## Next implementation gate
 
-Make the local container runtime available, then implement local SQL/RLS and the verified account/profile foundations with generated types. Follow with the one-off quest -> complete/undo -> interrupted-request recovery slice in [the first-session plan](../FIRST_SESSION_PLAN.md). Add product screens only when requested. Optional 3D, Motion, shadcn/ui, provider integrations and publishing dependencies are not installed yet.
+Fix reviewed pagination/schema bugs, finish domain DTO contracts, and prove verified account/profile handling plus the durable local queue/reconciliation slice. The earlier calendar journey is in [the first-session plan](../FIRST_SESSION_PLAN.md); [the personal AI proposal](../PERSONAL_AI_PLAN.md#8-recommended-first-pilot-and-build-sequence) defines the proposed next product direction. Add product screens only when requested. Optional 3D, Motion, shadcn/ui, provider integrations and publishing dependencies are not installed yet.
 
 ## Verification recorded on 16 October 2026
 
-- Typed lint, compiler/negative type cases, formatting, 53 unit/boundary tests across seven files and production build passed locally.
-- One Chromium smoke test passed against the built production server, checking the root shell and non-sensitive/no-store health response.
+- The latest commit review passed typed lint, compiler/negative type cases, formatting, 56 unit/boundary tests across eight files and production build locally.
+- Local SQL tests passed: 38 checks across four files. Generated database type drift checking passed. Separate rollback-only/runtime probes exposed the gaps linked above; those cases are not covered by the passing suites yet.
+- The earlier scaffold pass ran one Chromium smoke test against the built production server, checking the root shell and non-sensitive/no-store health response. This was not rerun in the latest review.
 - Temporary invalid-code probes confirmed compiler rejection of unsafe indexed access and imprecise optional fields, plus lint rejection of explicit/propagated `any` and unhandled promises. Those probes were removed.
 - The dependency graph has no peer conflicts. Local TOML and documentation links/fences/JSON examples were checked.
-- `pnpm db:types` correctly fails on missing application migrations; database/RLS and integrated Auth/sync behavior were not tested. The GitHub workflow has not run remotely.
+- Integrated Auth/sync behavior is not yet proven. No remote CI result was checked in this review.
 
 Verification used Node `24.22.0` and pinned pnpm from temporary task runtimes. System Node remains unchanged; select the `.nvmrc` version before running the app yourself.

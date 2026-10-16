@@ -2,13 +2,15 @@
 
 **Updated:** 16 October 2026
 
-**Status:** Reviewable design only. No Supabase project connection, migrations, SQL execution, tables, roles, policies, or buckets have been created.
+**Status:** Calendar schema design baseline, with a foundation subset now represented by local migrations/tests described in [the webapp status](webapp/README.md). The complete pilot schema and remote deployment are not proven by this document. New assistant/knowledge models remain design-only; no SQL is executed by the present brainstorming pass.
 
 **Related:** [RLS and permissions](RLS_PLAN.md), [technical design](TECHNICAL_DESIGN.md), [local sync](LOCAL_SYNC_DESIGN.md), [product plan](PRODUCT_PLAN.md), [creator extension](CREATOR_PLAN.md), and [workspace/AI](UI_UX_PLAN.md).
 
 **API contracts:** [API_CONTRACTS.md](API_CONTRACTS.md) defines the proposed RPC envelopes, bigint-safe wire types, related revision guards, bounded snapshot/acknowledgment behavior, and provider/planning request boundaries. It adds no executable migrations or remote connection.
 
 **Data architecture:** [DATA_ARCHITECTURE.md](DATA_ARCHITECTURE.md) explains conceptual ownership, intentional snapshots, consistency and lifecycle. This schema plan remains the source for exact fields/keys/constraints; adopting CUPID changes no table or wire identity.
+
+**Expanded assistant model:** [Personalization](PERSONALIZATION_PLAN.md#8-data-architecture-and-contracts-to-design) and [second-brain architecture](SECOND_BRAIN_PLAN.md#3-authority-representations-and-links) propose private settings/memory/notes, source and People references, links and optional derived search chunks/vectors. The thirteen-table calendar pilot is not a complete assistant schema. Define ownership, revisions, source eligibility/deletion, bounded search and RLS/API contracts before adding migrations; conceptual links do not require a graph database. A portable Markdown file is not an authoritative calendar command or a credentials/settings import.
 
 ## 1. Recommended structure and rollout
 

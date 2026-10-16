@@ -1,6 +1,10 @@
-# Calendar and Gamification Research Review
+# Product and Personal Assistant Research Review
 
 **Reviewed:** 14 October 2026
+
+**Personalization review added:** 16 October 2026. The user's latest direction makes personal AI primary, with Calendar and People capabilities. [PERSONAL_AI_PLAN.md](PERSONAL_AI_PLAN.md) records that pivot; [PERSONALIZATION_PLAN.md](PERSONALIZATION_PLAN.md) develops charter/settings/teaching/templates. Earlier calendar findings remain relevant to that capability, not a requirement that the whole product stay calendar-first.
+
+**Knowledge review added:** 16 October 2026. [SECOND_BRAIN_PLAN.md](SECOND_BRAIN_PLAN.md) explores explicit voice capture, linked Markdown notes and cited retrieval. Storage/API documentation supports implementation options; it does not establish improved recall, productivity or relationships in our product.
 
 **Purpose:** Translate the supplied research into useful product decisions. Related: [product plan](PRODUCT_PLAN.md), [technical design](TECHNICAL_DESIGN.md), [coding guide](AGENTS.md).
 
@@ -14,7 +18,7 @@
 
 ## 1. Main conclusion
 
-Gamecal should remain a useful calendar with an encouraging progression layer. Scheduling, accurate dates, clear conflicts, and easy recovery remain foundational. Rewards help people notice follow-through; they do not replace time management or establish that a person has learned a skill.
+The earlier calendar research supports keeping that capability useful with an encouraging progression layer. Scheduling, accurate dates, clear conflicts, and easy recovery remain foundational. Rewards help people notice follow-through; they do not replace time management or establish that a person has learned a skill. For the expanded assistant, usefulness and user control likewise need their own product-specific validation.
 
 The supplied calendar articles are feature recommendations and design examples, mostly from commercial publishers. They help identify expectations but do not prove that every listed feature improves personal productivity. Behavioral studies inform hypotheses; Gamecal still needs product-specific validation.
 
@@ -115,3 +119,45 @@ The creator extension is a direct user request, not a conclusion established by 
 Observe whether an artist can prepare a chapter, understand an unfilled slot versus a confirmed release, choose its timezone, and recover from a failed upload. Test with real comic lettering and both conventional manga and vertical pages. Ask readers to find a chapter, navigate in the intended direction, zoom, leave, and resume; measure comprehension/comfort and loading bytes rather than treating reading time or views as personal growth.
 
 Use official Supabase sources in the creator plan for server jobs, storage access, and delivery behavior. W3C accessibility guidance informs controls and automatic-movement choices; it does not establish demand or engagement benefits. Compare external cards and hosted reading during the invited creator pilot, with reliability, clarity, artwork quality, and delivery cost as explicit outcomes. Reading/publication adds no XP; only intentionally completed production quests follow the calendar reward contract.
+
+## 12. Personal assistant personalization
+
+Reviewed the supplied Grok/product, bot, settings and interaction-style references, prioritizing official documentation for actual capabilities. This is a design-research pass, not a provider selection or permission to connect services.
+
+| Source | What it establishes | Limit for Gamecal |
+| --- | --- | --- |
+| [Official Grok product page](https://x.ai/grok) | Lists custom instructions, cross-chat memory and voice as product features | Feature marketing does not prove personalization quality or transfer those features into our app |
+| [Official bot profile/template documentation](https://docs.x.ai/grok-bot/bots) | Describes durable bot configuration, memory and shared-template copies | A design reference; Gamecal still needs its own data boundaries and export review |
+| [Official approval documentation](https://docs.x.ai/grok-bot/approvals-security-and-privacy) | Describes specific-action review and scoped approval rules | A prompt alone is not an authorization system; our execution checks need independent proof |
+| [Nielsen's interaction-styles essay](https://jakobnielsenphd.substack.com/p/ai-interaction-styles) | Provides a framework for requested work, standing responsibility and visible learned rules | Expert UX interpretation, not causal evidence that our design improves planning |
+| [Supplied third-party settings article](https://aitoolsrecap.com/Blog/grok-agent-settings-explained-2026) | Secondary settings commentary | Do not use it as the authority for an official 4,000-character limit or exact API behavior |
+
+Recommended design choices are in [the personalization plan](PERSONALIZATION_PLAN.md): editable persona/charter, typed rules outside the prompt, per-action permissions, explicit teaching before passive observation, and curated presets before a marketplace. These are proposals derived from the product needs, not claims that one hybrid is universally best.
+
+Test whether users can teach a useful preference, distinguish “this once” from “from now on,” predict which actions require approval, correct a mistaken rule, and remove remembered information. Compare task success and correction burden with simple defaults. Evaluate unwanted suggestions and interruption frequency alongside usefulness. Do not infer relationship quality from contact frequency, or claim templates are viral before observing voluntary adoption and retained utility.
+
+## 13. Second brain and knowledge companion
+
+The proposed Knowledge Dungeon is a product metaphor, with a useful hypothesis: deliberate voice capture plus source-supported recall can reduce the work of organizing and revisiting personal context. A cute companion is a presentation choice to evaluate separately.
+
+| Source | Verified capability or correction | Design implication |
+| --- | --- | --- |
+| [Obsidian storage](https://obsidian.md/help/data-storage) and [links](https://obsidian.md/help/links) | Describes a Markdown vault, metadata cache and explicit internal links | A graph-like note experience does not require a specialized graph database |
+| [MDN File System API](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API) | Describes permissioned file handles and separate origin-private storage | Browser-local persistence does not imply portable access to arbitrary device folders |
+| [Supabase vectors](https://supabase.com/docs/guides/ai/vector-columns) and [hybrid retrieval](https://supabase.com/docs/guides/ai/hybrid-search) | Supports vector columns and combined keyword/semantic retrieval | Reuse the existing database if semantic evaluation justifies an index |
+| [OpenAI embeddings](https://developers.openai.com/api/docs/guides/embeddings) | Measures textual relatedness for retrieval and related uses | Similarity is not evidence of a personal preference or correct identity |
+| [OpenAI transcription](https://developers.openai.com/api/docs/guides/speech-to-text) and [deprecations](https://developers.openai.com/api/docs/deprecations) | `whisper-1` lacks streamed transcript responses and is listed for removal on 26 February 2027 | Treat the supplied model as an example, not the default for a new voice app |
+
+Deepgram Nova-2, Pinecone and Chroma were supplied examples, not evaluated or selected services. No free storage, guaranteed retrieval accuracy, low-latency promise or provider retention policy is inferred from the concept.
+
+Test capture/edit/save under interruption, finding the correct person's note, retrieval with sources, refusing to invent an unknown film or preference, and correcting/forgetting material across derived indexes. Compare simple keyword/link retrieval with a semantic candidate on the same small representative query set before taking on index cost/complexity. Include names/accents/languages from the actual pilot, old/contradictory notes and missing information. A dense graph or lively avatar is not proof of better memory or follow-through.
+
+**Automatic organization clarification:** The user wants organization/linking handled by an application workflow, with no manual link maintenance. This is an explicit product requirement, not a newly established research result. Evaluate how often captures become usefully organized without intervention, wrong-person/irrelevant link rates, clarification burden and whether corrections survive retries. Automatic navigation links do not themselves confirm facts or authorize actions; measure avoided work alongside correction effort.
+
+## 14. Mem0 build-versus-buy assessment
+
+Reviewed Mem0's official [product](https://mem0.ai/), [managed quickstart](https://docs.mem0.ai/platform/quickstart), [current managed graph documentation](https://docs.mem0.ai/platform/features/graph-memory), [open-source overview](https://docs.mem0.ai/open-source/overview) and [pricing page](https://mem0.ai/pricing) on 16 October 2026. Documentation examples establish candidate capabilities, not tested compatibility with our app.
+
+Managed Mem0 documents automatic entity-based memory connections and retrieval support. Its current graph documentation differs from older external-graph examples surfaced in search; use the actual chosen product/version rather than assuming Neo4j is required. Open-source offers configurable library/server deployment, including a PostgreSQL/pgvector server configuration; this does not prove our Supabase RLS/history/runtime integration.
+
+Recommendation in [the knowledge plan](SECOND_BRAIN_PLAN.md#11-mem0-evaluation-optional-memory-engine): no mandatory Mem0 dependency, but compare it against a narrow native baseline before investing in a general memory engine. Evaluate representative recall, corrections/forgetting, source provenance, account isolation, retry behavior, inspectable links, latency and total operating effort/cost. Verify current plan entitlements and provider processing separately before adoption; no numeric free quota, total cost or vendor benchmark improvement is assumed for Gamecal.

@@ -2,13 +2,17 @@
 
 **Updated:** 14 October 2026
 
-**Status:** Calendar/provider endpoint and SQL planning baseline. The [webapp foundation](webapp/README.md) has dependencies, Auth-only factories and a generic response decoder, but none of the domain RPCs/routes below exist. No Supabase connection, migrations, table/policy creation, provider credentials or deployment has occurred.
+**Status:** Calendar/provider endpoint and SQL planning baseline. The [webapp foundation](webapp/README.md) now has generated-type clients, local calendar foundation RPCs and initial runtime schemas; complete Auth/sync and broader assistant/provider routes remain unimplemented. Current read/validation bugs are in [the review register](DOCS_REVIEW.md#7-review-of-commits-35b6a5b-and-6a160ed). This brainstorming pass adds no code, migrations, provider connection or deployment.
 
 **Related:** [Product scope](PRODUCT_PLAN.md), [database structure](DATABASE_SCHEMA_PLAN.md), [RLS/grants](RLS_PLAN.md), [local sync](LOCAL_SYNC_DESIGN.md), [technical design](TECHNICAL_DESIGN.md), [itineraries](ITINERARY_PLAN.md), [weather](WEATHER_PLAN.md), [photos](PHOTO_PLAN.md), [planning assistant](UI_UX_PLAN.md), and [creator publishing](CREATOR_PLAN.md).
 
 **Screen/acceptance mapping:** [FIRST_SESSION_PLAN.md](FIRST_SESSION_PLAN.md) turns the first API slice into account/setup, quest editor, completion/undo, pending-sync and recovery states. An accepted first completion is 20 XP; no early room unlock or model action is implied.
 
 **Operating contract:** [OPERATIONS_PLAN.md](OPERATIONS_PLAN.md) specifies retained sign-out queues, cache cleanup, deletion jobs/status, shared request budgets and operational restore. Ordinary browser reads use allowlisted POST RPCs; owner SELECT grants support those invoker functions, while the Data API hook denies direct table endpoints.
+
+**Assistant personalization extension:** [PERSONALIZATION_PLAN.md](PERSONALIZATION_PLAN.md) defines the proposed charter/rule/memory/permission/teaching behavior. Exact request/response schemas are a subsequent design task, not implemented endpoints. Changes need owner identity, correlated typed inputs, expected revisions, durable operation IDs and explicit local-versus-accepted results. A proposal references the relevant settings/source revisions; trusted execution rechecks current permissions and constraints. Imported templates never grant authority, and settings edits do not implicitly execute a calendar action.
+
+**Knowledge extension:** [SECOND_BRAIN_PLAN.md](SECOND_BRAIN_PLAN.md) proposes explicit capture/save, automatic organization/linking, source-linked retrieval and Markdown export/import. Exact RPCs/routes are not specified or implemented yet. The organizer applies reversible generated summaries/topic/mention links without per-item approval, using authenticated scope, source/target validation, revision fencing and idempotent processing identities. Corrections/unlinks constrain reprocessing; consequential ambiguity is selectively clarified. Distinguish note save from model processing, derived indexing, approved memory promotion and each calendar action; return independent results for multiple intentions. Search needs authenticated bounded scope, source revisions/eligibility and citations. Frontmatter, imported IDs and note text cannot execute commands or establish ownership. Notes export is not restoration of pending calendar operations.
 
 ## 1. API ownership and first delivery
 

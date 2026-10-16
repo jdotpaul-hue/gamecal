@@ -4,7 +4,11 @@
 
 **Scope:** Original review of all 15 existing root Markdown documents, followed by the planning-resolution pass below. The original findings are retained as history. The resolution pass updates the relevant baseline documents; it authorizes no implementation, provider setup, Supabase connection, purchase or SQL execution.
 
-**Current assessment:** The six gap groups raised in chat have planning resolutions in the baseline documents and [OPERATIONS_PLAN.md](OPERATIONS_PLAN.md). The [webapp foundation](webapp/README.md) now provides tooling, typed helpers, Auth-only factories and account metadata storage. The CLI and local configuration exist; the container runtime, SQL/RLS, product Auth/sync flows and operating contracts remain unproven. Existing documents remain uncommitted; no remote project or deployment is configured.
+**Current assessment:** Commits `35b6a5b` and `6a160ed` add the earlier sync-prep fixes, owner read RPCs and generated-type-backed clients. Local verification passes 56 unit tests, 38 database tests, type drift, lint/types/formatting and production build. The latest focused probes below identify remaining pagination/zero-value gaps. Product Auth/sync, AI/voice/People and operating readiness remain incomplete. [PERSONAL_AI_PLAN.md](PERSONAL_AI_PLAN.md) records the new product direction without changing implementation.
+
+**Latest planning pass:** [PERSONALIZATION_PLAN.md](PERSONALIZATION_PLAN.md) now owns the hybrid charter/rules/permissions/teaching/template proposal. This is documentation only; the earlier application test counts above belong to the commit review, not a new implementation or fresh test run.
+
+**Knowledge exploration:** [SECOND_BRAIN_PLAN.md](SECOND_BRAIN_PLAN.md) now records the proposed voice/Markdown knowledge slice, a person-note template and source-supported retrieval. This is not implementation or a finalized expansion of the first pilot. The existing calendar defects remain open.
 
 ## Resolution register
 
@@ -131,3 +135,49 @@ Weather/Pexels retrieval uses separate Next.js reads and never blocks this save 
 **Scaffold verification:** The user authorized the `webapp` foundation without product UI/UX. Strict/typed lint and compiler checks, 53 unit tests, production build and one Chromium smoke test pass locally. No SQL migration/RLS or integrated Auth/sync test has run; no remote project is linked. The local CI workflow has not run on GitHub.
 
 **Recommended next work:** Make the local container runtime available and implement/prove the SQL/RLS/Auth foundation, then the first one-off quest/reconciliation slice. Keep live AI and later creator/radio gates explicit; no remote connection/table execution is implied by the scaffold.
+
+## 7. Review of commits 35b6a5b and 6a160ed
+
+**Scope:** Read-only implementation review plus product brainstorming. The new commits resolve the previously reported scheduling-input rejection, Undo canonical/progression response, receipt-before-epoch order and CI type-generation ordering. Read APIs and typed clients now exist; this is still not a complete Auth/queue/assistant journey.
+
+| Priority | Finding | Evidence and next action |
+| --- | --- | --- |
+| High | Calendar pagination drops the lookahead occurrence | A rollback-only SQL probe created three occurrences and requested page size one. Only two occurrences were returned across two pages while `page_set_complete` became true. [The cursor loop](webapp/supabase/migrations/20261016150000_read_api.sql) uses the first unreturned row, then the next query excludes it with `>`; anchor continuation on the last emitted row or implement a matching inclusive strategy. Add multi-page boundary/regression checks. |
+| High | Valid zero XP and zero account counters fail response validation | [Progression](webapp/src/lib/api/contracts/common.ts) `total_xp` and [command](webapp/src/lib/api/contracts/commands.ts) `account_data_revision` use the positive `revisionSchema`. Runtime probes reject XP `"0"` and a valid fresh-profile counter `"0"`; use the appropriate nonnegative bounded decimal schemas and prove bootstrap/Undo-to-zero end to end. |
+| Medium | Response and command validation remain broad | Tagged records use a free entity string plus `Record<string, unknown>`; `invokeCommand` accepts arbitrary `Json` rather than a command-correlated schema. Complete entity-specific DTOs, validated dates/zones and command request unions before agent tools or trusted cache projection consume them. |
+| Follow-up | Snapshot consistency and browser/Auth proof are incomplete | Add concurrent mutation during pagination, snapshot/cursor scope validation, real authenticated HTTP requests, expiry/recovery, and sender/account lifecycle tests. Existing SQL helpers and syntax/schema fixtures alone do not prove this journey. |
+| Maintenance | Earlier scaffold-only status paragraphs needed refreshing | This pass refreshed root/product/technical and webapp status/guidance. New product direction is in the linked personal-AI proposal; old review tables remain historical rather than repeating closed findings as current bugs. Feature acceptance plans still need final AI-pilot scope before a complete rewrite. |
+
+**Verification:** `pnpm verify`, `pnpm test:db` and `pnpm db:types:check` pass locally on the reviewed state: 56 unit tests across eight files and 38 SQL tests across four files. The SQL pagination probe rolled back all fixture changes. Runtime schema probes loaded existing modules without editing product code. No migration/reset, provider connection or product screen was added by this review. Passing suites do not negate the uncovered cases above.
+
+## 8. Personalization research and planning pass
+
+The user proposed a natural-language personality/charter, structured hard rules and permissions, interactive teaching, behavioral suggestions and shareable templates. [The dedicated plan](PERSONALIZATION_PLAN.md) separates those responsibilities and records staged delivery. Official feature references and evidence limits are in [the research review](RESEARCH_REVIEW.md#12-personal-assistant-personalization).
+
+Planning gaps addressed: prompt text versus enforced rules; per-capability authority instead of a global autonomy slider; temporary corrections versus standing lessons; explicit memory versus later opt-in observation; template configuration versus private data/permissions; and standing assignments versus foreground voice interactions. Forgetting includes derived/live context invalidation, and later revocation/background work has explicit execution-boundary requirements.
+
+Still open before implementation: exact typed rule set and API/SQL/RLS mapping, persona/charter limits, retention/expiry, cross-device settings behavior, voice/provider constraints and empirical usability targets. Broad autonomy, background jobs, external sends and a public marketplace are not silently included in the initial pilot. Existing calendar read/validation bugs remain open.
+
+Only Markdown was changed in this pass. No app code, dependencies, database state, providers, automations or public templates were added. Checks passed for 26 Markdown files, 334 local links/anchors, paired fences, three JSON examples, trailing whitespace and Git diff hygiene. These are documentation checks, separate from application verification.
+
+## 9. Second-brain concept review
+
+The supplied concept is recorded in [the second-brain proposal](SECOND_BRAIN_PLAN.md), with official storage/search/speech references in [the research review](RESEARCH_REVIEW.md#13-second-brain-and-knowledge-companion).
+
+Planning distinctions addressed: a linked Markdown vault versus a graph database; explicit links versus semantic similarity; source notes versus promoted memory; Markdown note content versus typed calendar/permission authority; browser-local data versus a portable device folder; and saved capture versus derived organization/indexing. Multi-intent requests have separately reviewed actions and truthful partial results. Private recaps start on demand; background reminders and agent federation need later contracts.
+
+Open implementation design: exact note/source/link/search SQL/RLS/API mapping, transcript/summary retention, stable export/import identity and restore limits, targeted voice provider/browser trials, retrieval evaluation/cost gates and the final notes pilot scope. The person-note Markdown example is a proposal, not an applied schema. No graph/vector service, filesystem integration, avatar/UI, provider call or automation is added by this pass.
+
+**Documentation verification:** Checks passed across 27 Markdown files, 359 local links/anchors, paired code fences, three JSON examples, trailing whitespace and Git diff hygiene. No application or database test was rerun for these documentation-only changes; the earlier commit-review results remain historical evidence.
+
+## 10. Automatic knowledge organization clarification
+
+The user clarified that people should not manually link thoughts/data. [The knowledge workflow](SECOND_BRAIN_PLAN.md#automatic-organization-workflow) now triggers on eligible saved captures: extract, find owner-scoped candidates, validate, persist reversible derived organization/links, selectively clarify uncertainty, index and report quietly. The earlier routine approval requirement is superseded. Calendar actions, promoted authoritative facts/settings and external effects retain separate authority.
+
+The plan now distinguishes generated summaries/edges from user-authored content and confirmed facts, preserves unresolved mentions without blocking capture, and records corrections/unlinks so retries do not recreate rejected connections. Updated product/AI, UX, technical, data, permissions and sync summaries agree with this behavior. No workflow, service, provider job or database operation was implemented; precise wire/schema contracts remain to be designed.
+
+## 11. Mem0 assessment
+
+The user asked whether Mem0 is needed. [The assessment](SECOND_BRAIN_PLAN.md#11-mem0-evaluation-optional-memory-engine) records it as an optional extraction/retrieval candidate, with a proposed comparison before building a broad memory engine. It is not a selected provider or prerequisite. Current managed graph behavior and open-source deployment choices are distinguished; no assumption of a required external graph database is adopted from older examples.
+
+Keep source notes, schedules, rules, identity and permissions canonical in Supabase. Adoption needs proof of source/correction/delete propagation, user isolation, retries, provenance, link controls, operating costs and supported runtime/storage. No SDK, account, provider request, database operation or implementation test is added by this research/documentation pass.

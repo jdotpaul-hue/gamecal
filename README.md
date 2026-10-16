@@ -1,8 +1,12 @@
 # Gamecal
 
-A planned web-first gamified calendar with personal/business itineraries, supportive progression and a small evolving fantasy room.
+A web-first personal assistant in planning, with Calendar and People capabilities and optional supportive progression.
 
-**Current state:** The [web app foundation](webapp/README.md) runs in `webapp/`: Next.js/React, strict TypeScript, domain helpers, Dexie account metadata, local Supabase migrations (foundation schema/RLS/RPCs), pgTAP database tests, and a CI workflow. Product UI/UX, Auth journeys, typed data clients, and the Dexie sync queue are not implemented yet. Local Supabase is disposable via Docker; no hosted Supabase or Vercel project is linked.
+**Latest product direction:** Personal AI is becoming the main product, with Calendar and People capabilities, user-shaped preferences/memory and voice as the primary interaction. Social means keeping in touch and planning with people. [The personal AI proposal](PERSONAL_AI_PLAN.md) records the confirmed direction, suggested home canvas and remaining launch choices; these features are not implemented yet.
+
+**Knowledge exploration:** [The second-brain proposal](SECOND_BRAIN_PLAN.md) adds explicit voice-note capture, linked Markdown knowledge and source-supported recall, presented by a cute-monster companion. It retains Supabase/Dexie and typed calendar facts, with optional semantic indexing later; it is planning, not a working filesystem vault or autonomous agent.
+
+**Current state:** The [web app foundation](webapp/README.md) runs in `webapp/`: Next.js/React, strict TypeScript, domain helpers, Dexie account metadata, local Supabase migrations (foundation schema/RLS/read and command RPCs), generated database types, typed data clients, pgTAP tests, and a CI workflow. Product UI/UX, complete Auth journeys, the Dexie sync queue and assistant/voice/People features are not implemented yet. [The review register](DOCS_REVIEW.md#7-review-of-commits-35b6a5b-and-6a160ed) records current correctness gaps. Local Supabase runs through Docker; no hosted Supabase or Vercel project is linked.
 
 ## Get started locally
 
@@ -35,6 +39,9 @@ Do not copy `node_modules`, `.next`, or local Docker volumes when moving the tre
 | Question | Authoritative document |
 | --- | --- |
 | What are we building and what must launch? | [Product plan](PRODUCT_PLAN.md) |
+| How does the personal-AI, voice and People direction change the product? | [Personal AI proposal](PERSONAL_AI_PLAN.md) |
+| How can users shape personality, teach rules and control assistant actions? | [Personalization and teaching](PERSONALIZATION_PLAN.md) |
+| How could voice notes become linked knowledge and cited recall? | [Second brain and knowledge companion](SECOND_BRAIN_PLAN.md) |
 | How do we apply CUPID and organize modules? | [Software design principles](ARCHITECTURE_PRINCIPLES.md) |
 | Who owns each fact, and how is it modeled? | [Data architecture](DATA_ARCHITECTURE.md) |
 | What stack, boundaries and delivery order do we use? | [Technical design](TECHNICAL_DESIGN.md) |
@@ -54,4 +61,4 @@ Feature plans: [Itineraries](ITINERARY_PLAN.md), [WeatherAPI](WEATHER_PLAN.md), 
 
 Keep contract details in their owning document and link summaries to it. Explicit user decisions take precedence; resolve conflicts by updating stale summaries rather than maintaining two competing versions of a rule.
 
-The [development checklist](DEVELOPMENT_SETUP.md) records prerequisites, local bootstrap, and remaining gates. Run application commands from `webapp`; its `package.json` and lockfile supersede historical dependency candidates. Next: wire generated database types and the durable local queue, then the profile → one-off quest → complete/undo → reconciliation slice with UI. Remote Supabase and Vercel remain a separate release gate.
+The [development checklist](DEVELOPMENT_SETUP.md) records prerequisites, local bootstrap, and remaining gates. Run application commands from `webapp`; its `package.json` and lockfile supersede historical dependency candidates. Next: fix reviewed read/schema bugs, complete domain DTOs, and prove Auth and durable local reconciliation. [The personal AI plan](PERSONAL_AI_PLAN.md#8-recommended-first-pilot-and-build-sequence) proposes the subsequent voice/calendar/People slice. Remote Supabase and Vercel remain a separate release gate.

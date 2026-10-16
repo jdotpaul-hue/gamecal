@@ -6,6 +6,10 @@
 
 **Related:** [Product](PRODUCT_PLAN.md), [technical design](TECHNICAL_DESIGN.md), [API contracts](API_CONTRACTS.md), [schema](DATABASE_SCHEMA_PLAN.md), [RLS](RLS_PLAN.md), [sync](LOCAL_SYNC_DESIGN.md), and [first-session UX](FIRST_SESSION_PLAN.md).
 
+**Assistant expansion:** [PERSONALIZATION_PLAN.md](PERSONALIZATION_PLAN.md) proposes explicit memory/teaching and later templates/standing assignments. Before those ship, extend deletion/export and budgets to their actual persisted data; forgotten content must not survive in audit text, retrieval caches or reusable live context. A private template export is not public publication. Browser-closed work is a separate backend lifecycle with expiry, revocation, retry receipts and spend controls, not an implied extension of foreground calendar sync. No automation is created by this plan.
+
+**Knowledge expansion:** [SECOND_BRAIN_PLAN.md](SECOND_BRAIN_PLAN.md) adds proposed source/summary retention, derived link/chunk/vector invalidation, bounded transcription/indexing spend and private Markdown portability. Edits/forgetting/deletion fence late jobs by source revision/hash; background workers and closed-app briefings remain separately gated. Do not retain raw audio by default or expose sensitive recap text through logs/lock-screen notifications. A local attachment path does not provide cloud indexing access, and notes export does not restore unsynced operations or replace tested backups.
+
 ## 1. Sign-out and local recovery
 
 The MVP does not import recovery bundles. **Exporting a copy never authorizes deleting the retained queue.** Pending work remains in its existing account partition until acknowledged, deliberately discarded, or removed following confirmed account deletion.

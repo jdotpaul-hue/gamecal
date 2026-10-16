@@ -6,7 +6,11 @@
 
 **Implementation status:** The [webapp foundation](webapp/README.md) initializes and validates account-specific `sync_meta` only. Confirmed records, outbox commands, projections, sender/reconciliation, verified account locking and lifecycle recovery below are not implemented yet.
 
-**Database/security plan:** [DATABASE_SCHEMA_PLAN.md](DATABASE_SCHEMA_PLAN.md) and [RLS_PLAN.md](RLS_PLAN.md) define canonical tables, private receipts/materialization, controlled writes, and snapshot tokens. They are planning documents; no project connection or migrations have run.
+**Knowledge proposal:** [SECOND_BRAIN_PLAN.md](SECOND_BRAIN_PLAN.md) would reuse account-scoped durable local intentions and confirmed snapshots for supported note/source/link metadata after their contracts exist. A source note is durable user content; a transcription/generation/embedding request is separate online work and never automatically replayed as a calendar command. Raw audio and filesystem handles do not enter the ordinary outbox. Keep unsynced notes through the same recovery protections, validate source revisions for derived results, and distinguish text saved from organization/indexing complete. Markdown export is not an account/queue restore mechanism. Direct folder writers need a separate conflict design.
+
+Automatic organization can start on eligible saved captures without a separate per-note approval. Its generated output needs validated source/target revisions, deduplicated processing identity and correction overrides. Interrupted processing leaves the source saved and organization pending/failed; resume only under valid account/configuration scope. This does not put provider prompts into the calendar outbox or promise closed-browser execution.
+
+**Database/security plan:** [DATABASE_SCHEMA_PLAN.md](DATABASE_SCHEMA_PLAN.md) and [RLS_PLAN.md](RLS_PLAN.md) define canonical tables, private receipts/materialization, controlled writes, and snapshot tokens. Local migrations implement a calendar foundation subset; full pilot sync and remote deployment remain unproven. New knowledge contracts are planning only.
 
 **Wire contract:** [API_CONTRACTS.md](API_CONTRACTS.md) defines the versioned request envelope, named commands, safe decimal-string revisions, acknowledgments/current canonical records, scope invalidations, and error recovery. Validate transport responses before acknowledging queued work.
 

@@ -2,13 +2,19 @@
 
 **Updated:** 14 October 2026
 
-**Status:** Planning only. Illustrative SQL below is documentation, not an applied migration. No Supabase connection or database/security change is authorized by this planning request.
+**Status:** Security design baseline. Local calendar foundation migrations/tests now exist as recorded in [the webapp status](webapp/README.md); illustrative SQL below is not proof of the entire pilot implementation. Assistant/knowledge policies remain to be designed. This brainstorming pass makes no database/security changes or remote connection.
 
 **Companion:** [Database structure](DATABASE_SCHEMA_PLAN.md). Also read [sync](LOCAL_SYNC_DESIGN.md), [technical design](TECHNICAL_DESIGN.md), [creator publishing](CREATOR_PLAN.md), and [agent guide](AGENTS.md).
 
 **API detail:** [API_CONTRACTS.md](API_CONTRACTS.md) specifies typed command envelopes, wire revisions, scope reads, related guards, safe transport errors and the first implementation slice. Function names/signatures remain proposed until locally tested migrations exist.
 
 **Operating detail:** [OPERATIONS_PLAN.md](OPERATIONS_PLAN.md) defines retained queues, private budget/deletion records, service-only deletion markers, shared limits and restore handling. The foundation has eleven tables; the complete calendar pilot has thirteen. These remain documentation-only requirements.
+
+**Personalization extension:** [PERSONALIZATION_PLAN.md](PERSONALIZATION_PLAN.md#8-data-architecture-and-contracts-to-design) proposes private configuration/rules/memory and later narrow action grants/templates. Exact schema and policies are not designed or executed by this extension. Owner RLS remains necessary, while assistant-specific permission checks must also run at trusted tool execution. Persona text, model output and templates cannot create grants. Public sharing requires a separate allowlisted projection; never expose private assistant rows through it.
+
+**Knowledge extension:** [SECOND_BRAIN_PLAN.md](SECOND_BRAIN_PLAN.md) proposes private notes, sources, links and optional derived chunks/vectors. Every read/search/link traversal must enforce authenticated ownership and current parent/source eligibility before model context is assembled. A broad privileged vector search followed by client filtering is not acceptable isolation. Prevent cross-owner source/person/link references; deletion invalidates derived access. New precise schemas, grants, functions and adversarial fixtures are still to be designed. A friend's agent has no default access to any of these records.
+
+Automatic organization may persist reversible generated summaries/topic/mention links through narrowly scoped validated operations without per-item human approval. Processing configuration, authenticated owner, source/target eligibility, revisions and correction overrides remain enforced outside the model. This grants no authority to alter People facts, rules, calendar state or permissions; those retain distinct command/approval contracts. The model never receives an unrestricted writer.
 
 ## 1. Access model
 
@@ -164,7 +170,7 @@ Storage cleanup is independent of row cascades. When implementing hosted content
 
 ## 7. Other feature boundaries
 
-- AI has no direct elevated database capability: it reads explicitly selected owner context and returns untrusted proposals. User review/editor/save is the only mutation path; persistent chat tables are not planned now.
+- AI has no direct elevated database capability. Calendar actions use reviewed proposals and the normal validated save path. Knowledge organization has the narrow derived-output exception described above, validated independently of model text; it cannot mutate calendar facts or permissions. Persistent chat is not implied by note capture.
 - Weather/Pexels reads keep provider secrets server-side. Durable location/photo preferences remain owner-controlled rows; provider response/audio/image binaries are excluded from the calendar schema/outbox.
 - Twin-mascot/workspace state is presentation state. Radio is parked. These features do not justify new permissive policies, public account profiles, or XP grants.
 - Future sharing requires explicit membership/owner/viewer/editor semantics and a new policy/test design. UUIDs alone do not grant permission or establish multiplayer readiness.
