@@ -120,6 +120,18 @@ isOneToOne: false
 "ensure_profile":
 { Args: { "request": Json }; Returns: Json
                            },
+"get_calendar_scope":
+{ Args: { "request": Json }; Returns: Json
+                           },
+"get_own_operation_result":
+{ Args: { "request": Json }; Returns: Json
+                           },
+"get_profile":
+{ Args: { "request": Json }; Returns: Json
+                           },
+"get_progression":
+{ Args: { "request": Json }; Returns: Json
+                           },
 "skip_occurrence":
 { Args: { "request": Json }; Returns: Json
                            },

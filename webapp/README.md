@@ -74,7 +74,7 @@ Local SQL migrations implement the foundation slice (profiles, one-off quests, o
 
 Copy `.env.example` to an ignored `.env.local` only when local services are ready. Supply the actual local URL and `sb_publishable_...` public key. Legacy anonymous JWTs are deliberately rejected until a tested decoder is added. No privileged key is required by this scaffold.
 
-Auth factories expose `{ auth }` only. The SDK still uses a provisional `never` database parameter until typed data clients land. Run `pnpm db:types` after local migrations to refresh `src/types/database.generated.ts` (prettier-ignored; regenerate rather than hand-edit). Command-specific Zod envelopes and wired RPC clients are the next database slice.
+Auth factories expose `{ auth, client }` with generated `Database` types. Run `pnpm db:types` after local migrations to refresh `src/types/database.generated.ts` (prettier-ignored; regenerate rather than hand-edit). Typed read/command helpers live in `src/lib/supabase/rpc.ts` with Zod contracts under `src/lib/api/contracts/`.
 
 The account database exposes initialization and close operations over `sync_meta` only. It validates persisted identity/version before trusting metadata and leaves unsupported records untouched. Initialization rejects on storage/transaction failure; callers must retain input and handle that failure. Confirmed quest records, a durable outbox, sender leases, lifecycle locking, cache cleanup and reconciliation are not implemented. Local partitioning is not encryption or authentication.
 

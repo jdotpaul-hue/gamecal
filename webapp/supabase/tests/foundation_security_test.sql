@@ -91,6 +91,7 @@ CREATE OR REPLACE FUNCTION test_support.alice_sync_epoch()
 RETURNS uuid
 LANGUAGE sql
 STABLE
+SECURITY DEFINER
 SET search_path = public
 AS $$
   SELECT sync_epoch
@@ -100,7 +101,7 @@ $$;
 
 GRANT EXECUTE ON FUNCTION test_support.alice_sync_epoch() TO PUBLIC;
 
-SELECT plan(18);
+SELECT plan(17);
 
 SELECT has_extension('uuid-ossp', 'uuid-ossp extension is available');
 
@@ -158,14 +159,15 @@ SELECT ok(
 
 SELECT test_support.authenticate_as('22222222-2222-4222-8222-222222222222'::uuid);
 
-SELECT is(
-  (
+SELECT throws_ok(
+  $$
     SELECT count(*)::integer
     FROM public.quest_occurrences
     WHERE definition_id = 'fda923dc-3ebd-489e-a655-37e04fef3163'::uuid
-  ),
-  0,
-  'user B cannot read user A occurrences through RLS'
+  $$,
+  '42501',
+  NULL,
+  'user B cannot read occurrences through direct table SELECT'
 );
 
 SELECT test_support.clear_auth();
@@ -235,14 +237,11 @@ SELECT ok(
 );
 
 SELECT is(
-  (
-    SELECT count(*)::integer
-    FROM public.completion_rewards
-    WHERE occurrence_id = '55a014c9-4d95-5e15-9d2b-aac1953f81b8'::uuid
-      AND reversed_at IS NULL
-  ),
-  1,
-  'exactly one active reward exists after completion'
+  public.get_progression(
+    jsonb_build_object('contract_version', 1, 'data', '{}'::jsonb)
+  ) -> 'data' -> 'summary' -> 'progression' -> 'record' ->> 'total_xp',
+  '20',
+  'completion updates accepted progression total'
 );
 
 SELECT ok(
@@ -306,37 +305,54 @@ SELECT throws_ok(
 
 SELECT is(
   (
-    SELECT revision::text
-    FROM public.quest_occurrences
-    WHERE id = '55a014c9-4d95-5e15-9d2b-aac1953f81b8'::uuid
+    SELECT elem -> 'record' ->> 'revision'
+    FROM jsonb_array_elements(
+      public.get_calendar_scope(
+        jsonb_build_object(
+          'contract_version', 1,
+          'data', jsonb_build_object(
+            'from_date', '2026-10-12',
+            'until_date', '2026-10-20',
+            'display_timezone', 'UTC',
+            'page_size', 50,
+            'snapshot_token', NULL,
+            'cursor', NULL
+          )
+        )
+      ) -> 'data' -> 'records'
+    ) AS elem
+    WHERE elem ->> 'entity' = 'quest_occurrence'
+      AND elem -> 'record' ->> 'id' = '55a014c9-4d95-5e15-9d2b-aac1953f81b8'
   ),
   '2',
   'stale revision completion leaves occurrence revision unchanged'
 );
 
 SELECT ok(
-  (public.undo_occurrence(
-    jsonb_build_object(
-      'contract_version', 1,
-      'operation_id', '10101010-1010-4101-8101-101010101010',
-      'sync_epoch', test_support.alice_sync_epoch()::text,
-      'expected_revision', '2',
-      'data', jsonb_build_object(
-        'occurrence_id', '55a014c9-4d95-5e15-9d2b-aac1953f81b8'
-      )
-    )
-  ) ->> 'ok')::boolean,
-  'undo_occurrence returns completed quest to pending'
-);
-
-SELECT isnt(
   (
-    SELECT reversed_at
-    FROM public.completion_rewards
-    WHERE occurrence_id = '55a014c9-4d95-5e15-9d2b-aac1953f81b8'::uuid
+    WITH undo_response AS (
+      SELECT public.undo_occurrence(
+        jsonb_build_object(
+          'contract_version', 1,
+          'operation_id', '10101010-1010-4101-8101-101010101010',
+          'sync_epoch', test_support.alice_sync_epoch()::text,
+          'expected_revision', '2',
+          'data', jsonb_build_object(
+            'occurrence_id', '55a014c9-4d95-5e15-9d2b-aac1953f81b8'
+          )
+        )
+      ) AS body
+    )
+    SELECT (body ->> 'ok')::boolean
+      AND EXISTS (
+        SELECT 1
+        FROM jsonb_array_elements(body -> 'canonical' -> 'records') AS elem
+        WHERE elem ->> 'entity' = 'completion_reward'
+          AND (elem -> 'record' ->> 'reversed_at') IS NOT NULL
+      )
+    FROM undo_response
   ),
-  NULL,
-  'undo reverses the active reward'
+  'undo_occurrence returns quest to pending and reverses reward'
 );
 
 SELECT ok(

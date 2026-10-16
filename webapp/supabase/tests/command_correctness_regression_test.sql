@@ -61,6 +61,7 @@ CREATE OR REPLACE FUNCTION test_support.alice_sync_epoch()
 RETURNS uuid
 LANGUAGE sql
 STABLE
+SECURITY DEFINER
 SET search_path = public
 AS $$
   SELECT sync_epoch
